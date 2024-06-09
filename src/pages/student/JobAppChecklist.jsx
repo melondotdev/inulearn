@@ -64,11 +64,7 @@ const JobAppChecklist = () => {
       'Book a job search session with your Career Specialist / Alumni Placement Specialist'
     ]};
   
-  const { user, loading } = useContext(AuthContext);
-  
-  if (loading) {
-    return <span className="loading loading-dots loading-lg flex item-center mx-auto"></span>;
-  }
+  const { user } = useContext(AuthContext);
   
   return (
     <ThemeProvider theme={defaultTheme}>

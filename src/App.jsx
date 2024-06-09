@@ -12,6 +12,7 @@ import AuthProvider from './auth/AuthProvider';
 import StarsStories from "./pages/student/StarStories";
 import Research from "./pages/student/Research";
 import Roadmap from "./pages/student/Roadmap";
+import Profile from "./pages/student/Profile";
 import ResetPw from "./pages/ResetPw";
 
 const App = () => {
@@ -77,6 +78,14 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <Roadmap />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <Profile />
                 </PrivateRoute>
               }
             />

@@ -51,7 +51,7 @@ const StarsStories = () => {
     'Tech 3 - Share an example of a time when you had to collaborate with others to resolve a technical issue.',
   ];
 
-  const { user, loading } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [selectedOption, setSelectedOption] = useState('');
   const [starsStory, setStarsStory] = useState('');
   const [open, setOpen] = useState(false);
@@ -95,10 +95,6 @@ const StarsStories = () => {
     }
     setOpen(false);
   };
-
-  if (loading) {
-    return <span className="loading loading-dots loading-lg flex item-center mx-auto"></span>;
-  }
 
   return (
     <ThemeProvider theme={defaultTheme}>

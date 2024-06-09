@@ -45,6 +45,7 @@ const Login = () => {
     loginUser(email, password)
       .then((result) => {
         console.log(result);
+        e.target.reset();
         navigate("/dashboard");
       })
       .catch((error) => {
@@ -65,8 +66,6 @@ const Login = () => {
         setOpen(true); // Show the alert
         console.log(errorMessage);
       });
-
-    e.target.reset();
   };
 
   const handleClose = (event, reason) => {

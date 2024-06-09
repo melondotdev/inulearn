@@ -10,51 +10,66 @@ import WavingHandIcon from '@mui/icons-material/WavingHand';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import BiotechIcon from '@mui/icons-material/Biotech';
 import MapIcon from '@mui/icons-material/Map';
+import { Link } from 'react-router-dom';
 
 export const mainListItems = (
   <React.Fragment>
-    <ListItemButton component="a" href='/dashboard'>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItemButton>
-    <ListItemButton component="a" href='/checklist'>
-      <ListItemIcon>
-        <ChecklistIcon />
-      </ListItemIcon>
-      <ListItemText primary="Job App Checklist" />
-    </ListItemButton>
-    <ListItemButton component="a" href='/resume'>
-      <ListItemIcon>
-        <DescriptionIcon />
-      </ListItemIcon>
-      <ListItemText primary="Resume" />
-    </ListItemButton>
-    <ListItemButton component="a" href='/pitch'>
-      <ListItemIcon>
-        <WavingHandIcon />
-      </ListItemIcon>
-      <ListItemText primary="Elevator Pitch" />
-    </ListItemButton>
-    <ListItemButton component="a" href='/stars'>
-      <ListItemIcon>
-        <AutoAwesomeIcon />
-      </ListItemIcon>
-      <ListItemText primary="STARS Stories" />
-    </ListItemButton>
-    <ListItemButton component="a" href='/research'>
-      <ListItemIcon>
-        <BiotechIcon />
-      </ListItemIcon>
-      <ListItemText primary="Job Research" />
-    </ListItemButton>
-    <ListItemButton component="a" href='/roadmap'>
-      <ListItemIcon>
-        <MapIcon />
-      </ListItemIcon>
-      <ListItemText primary="IT Roadmap" />
-    </ListItemButton>
+    <Link to="/dashboard">
+      <ListItemButton >
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItemButton>
+    </Link>
+    <Link to="/checklist">
+      <ListItemButton>
+        <ListItemIcon>
+          <ChecklistIcon />
+        </ListItemIcon>
+        <ListItemText primary="Job App Checklist" />
+      </ListItemButton>
+    </Link>
+    <Link to="/resume">
+      <ListItemButton>
+        <ListItemIcon>
+          <DescriptionIcon />
+        </ListItemIcon>
+        <ListItemText primary="Resume" />
+      </ListItemButton>
+    </Link>
+    <Link to="/pitch">
+      <ListItemButton>
+        <ListItemIcon>
+          <WavingHandIcon />
+        </ListItemIcon>
+        <ListItemText primary="Elevator Pitch" />
+      </ListItemButton>
+    </Link>
+    <Link to="/stars">
+      <ListItemButton>
+        <ListItemIcon>
+          <AutoAwesomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="STARS Stories" />
+      </ListItemButton>
+    </Link>
+    <Link to="/research">
+      <ListItemButton>
+        <ListItemIcon>
+          <BiotechIcon />
+        </ListItemIcon>
+        <ListItemText primary="Job Research" />
+      </ListItemButton>
+    </Link>
+    <Link to="/roadmap">
+      <ListItemButton>
+        <ListItemIcon>
+          <MapIcon />
+        </ListItemIcon>
+        <ListItemText primary="IT Roadmap" />
+      </ListItemButton>
+    </Link>
   </React.Fragment>
 );
 

@@ -37,7 +37,7 @@ const Resume = () => {
     <p style="margin-bottom: 0.5rem;">4. Make improvements according to the feedback given by your career specialist.</p>
   `;
 
-  const { user, loading } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [resumeUrl, setResumeUrl] = useState('');
   const [savedUrl, setSavedUrl] = useState('');
   const [open, setOpen] = useState(false);
@@ -75,10 +75,6 @@ const Resume = () => {
     }
     setOpen(false);
   };
-
-  if (loading) {
-    return <span className="loading loading-dots loading-lg flex item-center mx-auto"></span>;
-  }
 
   return (
     <ThemeProvider theme={defaultTheme}>

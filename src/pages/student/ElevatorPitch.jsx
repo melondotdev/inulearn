@@ -94,7 +94,7 @@ const ElevatorPitch = () => {
     }
   ];
 
-  const { user, loading } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [elevatorPitch, setElevatorPitch] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedTable, setSelectedTable] = useState(null);
@@ -116,7 +116,7 @@ const ElevatorPitch = () => {
   const handleElevatorPitchChange = (e) => {
     setElevatorPitch(e.target.value);
   };
-
+  
   const handleSave = async () => {
     if (user) {
       const docRef = doc(db, 'elevatorpitch', user.uid);
@@ -138,10 +138,6 @@ const ElevatorPitch = () => {
     }
     setOpen(false);
   };
-
-  if (loading) {
-    return <span className="loading loading-dots loading-lg flex item-center mx-auto"></span>;
-  }
 
   return (
     <ThemeProvider theme={defaultTheme}>

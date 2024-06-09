@@ -23,7 +23,7 @@ const defaultTheme = createTheme();
 const Dashboard = () => {
   const title = 'Dashboard';
 
-  const { user, loading } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [progressData, setProgressData] = useState({});
 
   useEffect(() => {
@@ -49,10 +49,6 @@ const Dashboard = () => {
 
     fetchProgressData();
   }, [user]);
-
-  if (loading) {
-    return <span className="loading loading-dots loading-lg flex item-center mx-auto"></span>;
-  }
   
   const data = {
     labels: [
@@ -72,13 +68,13 @@ const Dashboard = () => {
           (progressData.research / 19) * 100,
         ],
         label: '% Completion',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgb(254, 148, 0, 0.2)',
+        borderColor: 'rgb(254, 148, 0, 0.8)',
         borderWidth: 1,
       },
     ],
   };
-
+  
   const options = {
     indexAxis: 'y',
     scales: {
@@ -116,7 +112,7 @@ const Dashboard = () => {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                  <Typography component="h2" variant="h6" color="#FC8149" gutterBottom>
                     Capstone Progress
                   </Typography>
                   <Bar data={data} options={options} />

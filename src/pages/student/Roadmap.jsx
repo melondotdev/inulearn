@@ -224,7 +224,7 @@ const Roadmap = () => {
     }
   ];
   
-  const { user, loading } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [selectedCourse, setSelectedCourse] = useState('');
   const [responses, setResponses] = useState({});
 
@@ -270,11 +270,7 @@ const Roadmap = () => {
   } else {
     progressImage = Gotthere;
   }
-
-  if (loading) {
-    return <span className="loading loading-dots loading-lg flex item-center mx-auto"></span>;
-  }
-
+  
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>

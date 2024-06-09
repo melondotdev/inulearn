@@ -62,8 +62,8 @@ const Research = () => {
     "Question to ask the interviewer #2",
     "Question to ask the interviewer #3"
   ];
-
-  const { user, loading } = useContext(AuthContext);
+  
+  const { user } = useContext(AuthContext);
   const [responses, setResponses] = useState({});
   const [open, setOpen] = useState(false);
 
@@ -98,10 +98,6 @@ const Research = () => {
     }
     setOpen(false);
   };
-
-  if (loading) {
-    return <span className="loading loading-dots loading-lg flex item-center mx-auto"></span>;
-  }
 
   return (
     <ThemeProvider theme={defaultTheme}>

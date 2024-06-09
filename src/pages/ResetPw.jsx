@@ -49,10 +49,10 @@ const ResetPw = () => {
           <img src={Logo} alt='logo' className='w-32 h-32 rounded-full mb-2' />
           {emailSent ? (
             <>
-              <Typography component="h1" variant="h5">
+              <Typography component="h1" variant="h5" sx={{ mb: 4 }}>
                 Email Sent!
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{ mb: 4, textAlign: "center" }}>
                 An email with instructions to reset your password has been sent to {email}.
               </Typography>
               <Link component={RouterLink} to="/login" variant="body2">

@@ -44,6 +44,7 @@ const SignUp = () => {
         });
         navigate("/dashboard");
         console.log(result);
+        e.target.reset();
       })
       .catch((error) => {
         let errorMessage = error.message; // Get the error message from Firebase
@@ -63,7 +64,6 @@ const SignUp = () => {
         
         console.error("Error signing up:", errorMessage);
       });
-    e.target.reset();
   };
 
   return (

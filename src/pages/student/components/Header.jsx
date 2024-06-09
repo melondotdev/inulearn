@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AuthContext } from "../../../auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
@@ -15,7 +15,11 @@ import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import Button from '@mui/material/Button';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Box from '@mui/material/Box';
+import Popover from '@mui/material/Popover';
 
 const drawerWidth = 240;
 
@@ -65,12 +69,15 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const Header = ({ title }) => {
   const [open, setOpen] = React.useState(true);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [profileMenuAnchorEl, setProfileMenuAnchorEl] = useState(null);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
   // Access the logOut, and loading state from the AuthContext
-  const { logOut, loading } = useContext(AuthContext);
+  const { logOut } = useContext(AuthContext);
   
   // Use the useNavigate hook to programmatically navigate between pages
   const navigate = useNavigate();
@@ -85,10 +92,39 @@ const Header = ({ title }) => {
       .catch((error) => console.error(error));
   };
 
+  // Handle notification button click
+  const handleNotificationClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleNotificationClose = () => {
+    setAnchorEl(null);
+  };
+
+  const openPopover = Boolean(anchorEl);
+  const popoverId = openPopover ? 'notification-popover' : undefined;
+
+  // Handle profile menu
+  const handleProfileMenuOpen = (event) => {
+    setProfileMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileMenuClose = () => {
+    setProfileMenuAnchorEl(null);
+  };
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+    handleProfileMenuClose();
+  };
+
+  const handleLogOutClick = () => {
+    handleSignOut();
+    handleProfileMenuClose();
+  };
+
   // Render loading indicator if authentication state is still loading
-  return loading ? (
-    <span className="loading loading-dots loading-lg flex item-center mx-auto"></span>
-  ) : (
+  return (
     <>
       <AppBar position="absolute" open={open}>
         <Toolbar
@@ -118,13 +154,20 @@ const Header = ({ title }) => {
           >
             {title}
           </Typography>
-          <Button onClick={handleSignOut} color="inherit">
-            Log Out
-          </Button>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
+          <IconButton color="inherit" onClick={handleNotificationClick}>
+            <Badge badgeContent={0} color="secondary">
               <NotificationsIcon />
             </Badge>
+          </IconButton>
+          <IconButton
+            edge="end"
+            aria-label="account of current user"
+            aria-controls="profile-menu"
+            aria-haspopup="true"
+            onClick={handleProfileMenuOpen}
+            color="inherit"
+          >
+            <AccountCircle />
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -148,6 +191,34 @@ const Header = ({ title }) => {
           {/* {secondaryListItems} */}
         </List>
       </Drawer>
+      <Popover
+        id={popoverId}
+        open={openPopover}
+        anchorEl={anchorEl}
+        onClose={handleNotificationClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <Box sx={{ p: 2 }}>
+          <Typography>You have no new notifications</Typography>
+        </Box>
+      </Popover>
+      <Menu
+        id="profile-menu"
+        anchorEl={profileMenuAnchorEl}
+        keepMounted
+        open={Boolean(profileMenuAnchorEl)}
+        onClose={handleProfileMenuClose}
+      >
+        <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
+        <MenuItem onClick={handleLogOutClick}>Log Out</MenuItem>
+      </Menu>
     </>
   );
 }
