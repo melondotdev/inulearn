@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from "../auth/AuthProvider";
+import { AuthContext } from "../../auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import Copyright from '../components/Copyright';
+import Copyright from '../../components/Copyright';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import Logo from '../assets/logo1.png';
+import Logo from '../../assets/logo1.png';
 
 const defaultTheme = createTheme();
 

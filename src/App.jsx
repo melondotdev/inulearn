@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
+import Home from "./pages/landing/Home";
+import Login from "./pages/landing/Login";
+import SignUp from "./pages/landing/SignUp";
 import Dashboard from "./pages/student/Dashboard";
 import JobAppChecklist from "./pages/student/JobAppChecklist";
 import Resume from './pages/student/Resume';
@@ -13,7 +13,7 @@ import StarsStories from "./pages/student/StarStories";
 import Research from "./pages/student/Research";
 import Roadmap from "./pages/student/Roadmap";
 import Profile from "./pages/student/Profile";
-import ResetPw from "./pages/ResetPw";
+import ResetPw from "./pages/landing/ResetPw";
 
 const App = () => {
   return (
