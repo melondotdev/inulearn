@@ -46,7 +46,7 @@ const App = () => {
             <Route
               path="/npc-jita/dashboard"
               element={
-                <PrivateRoute allowedRoles={['*']}>
+                <PrivateRoute allowedRoles={['npc-jita-student', 'teacher']}>
                   <Dashboard />
                 </PrivateRoute>
               }

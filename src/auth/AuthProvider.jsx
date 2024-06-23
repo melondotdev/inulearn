@@ -19,13 +19,16 @@ const AuthProvider = ({ children }) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     await user.getIdToken(true); // Force token refresh to include custom claims
-    setRole('student');
+    const idTokenResult = await user.getIdTokenResult();
+    console.log('Custom claims on createUser:', idTokenResult.claims);
+    setRole(idTokenResult.claims.role || 'student');
     return userCredential;
   };
 
   const loginUser = async (email, password) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+    await user.getIdToken(true); // Force token refresh to include custom claims
     const idTokenResult = await user.getIdTokenResult();
     setRole(idTokenResult.claims.role);
     return userCredential;
@@ -35,10 +38,11 @@ const AuthProvider = ({ children }) => {
     setRole(null);
     return signOut(auth);
   };
-
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
+        await currentUser.getIdToken(true); // Force token refresh to include custom claims
         const idTokenResult = await currentUser.getIdTokenResult();
         setUser(currentUser);
         setRole(idTokenResult.claims.role);
