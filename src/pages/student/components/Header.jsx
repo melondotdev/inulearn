@@ -210,7 +210,7 @@ const Header = ({ title, list }) => {
         onClose={handleProfileMenuClose}
       >
         <MenuItem component={Link} to="/profile">Profile</MenuItem>
-        <MenuItem component={Link} to="/courses">Back to My Courses</MenuItem>
+        <MenuItem component={Link} to="/courses">My Courses</MenuItem>
         <MenuItem component={Link} to="/booking">Book an Advisor</MenuItem>
         <MenuItem onClick={handleSignOut}>Log Out</MenuItem>
       </Menu>

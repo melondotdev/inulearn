@@ -10,7 +10,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
     return <span className="loading loading-dots loading-lg"></span>;
   }
 
-  if (user && allowedRoles.includes(role)) {
+  if (user && (allowedRoles.includes(role) || allowedRoles.includes('*'))) {
     return children;
   }
 

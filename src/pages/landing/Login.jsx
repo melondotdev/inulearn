@@ -28,13 +28,12 @@ const Login = () => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
 
-  // Use useEffect to handle navigation after login
   useEffect(() => {
     if (user) {
       navigate("/courses");
     }
   }, [user, navigate]);
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);

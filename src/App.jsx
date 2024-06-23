@@ -30,7 +30,7 @@ const App = () => {
             <Route
               path="/courses"
               element={
-                <PrivateRoute allowedRoles={['student', 'teacher']}>
+                <PrivateRoute allowedRoles={['*']}>
                   <MyCourses />
                 </PrivateRoute>
               }
@@ -38,7 +38,7 @@ const App = () => {
             <Route
               path="/booking"
               element={
-                <PrivateRoute allowedRoles={['student', 'teacher']}>
+                <PrivateRoute allowedRoles={['student', 'teacher', '*']}>
                   <Booking />
                 </PrivateRoute>
               }
@@ -46,7 +46,7 @@ const App = () => {
             <Route
               path="/npc-jita/dashboard"
               element={
-                <PrivateRoute allowedRoles={['student', 'teacher']}>
+                <PrivateRoute allowedRoles={['student', 'teacher', '*']}>
                   <Dashboard />
                 </PrivateRoute>
               }
@@ -54,7 +54,7 @@ const App = () => {
             <Route
               path="/npc-jita/checklist"
               element={
-                <PrivateRoute allowedRoles={['student', 'teacher']}>
+                <PrivateRoute allowedRoles={['student', 'teacher', '*']}>
                   <JobAppChecklist />
                 </PrivateRoute>
               }
@@ -62,7 +62,7 @@ const App = () => {
             <Route
               path="/npc-jita/resume"
               element={
-                <PrivateRoute allowedRoles={['student', 'teacher']}>
+                <PrivateRoute allowedRoles={['student', 'teacher', '*']}>
                   <Resume />
                 </PrivateRoute>
               }
@@ -70,7 +70,7 @@ const App = () => {
             <Route
               path="/npc-jita/pitch"
               element={
-                <PrivateRoute allowedRoles={['student', 'teacher']}>
+                <PrivateRoute allowedRoles={['student', 'teacher', '*']}>
                   <ElevatorPitch />
                 </PrivateRoute>
               }
@@ -78,7 +78,7 @@ const App = () => {
             <Route
               path="/npc-jita/stars"
               element={
-                <PrivateRoute allowedRoles={['student', 'teacher']}>
+                <PrivateRoute allowedRoles={['student', 'teacher', '*']}>
                   <StarsStories />
                 </PrivateRoute>
               }
@@ -86,7 +86,7 @@ const App = () => {
             <Route
               path="/npc-jita/research"
               element={
-                <PrivateRoute allowedRoles={['student', 'teacher']}>
+                <PrivateRoute allowedRoles={['student', 'teacher', '*']}>
                   <Research />
                 </PrivateRoute>
               }
@@ -94,7 +94,7 @@ const App = () => {
             <Route
               path="/npc-jita/roadmap"
               element={
-                <PrivateRoute allowedRoles={['student', 'teacher']}>
+                <PrivateRoute allowedRoles={['student', 'teacher', '*']}>
                   <Roadmap />
                 </PrivateRoute>
               }
@@ -102,7 +102,7 @@ const App = () => {
             <Route
               path="/profile"
               element={
-                <PrivateRoute allowedRoles={['student', 'teacher']}>
+                <PrivateRoute allowedRoles={['student', 'teacher', '*']}>
                   <Profile />
                 </PrivateRoute>
               }
