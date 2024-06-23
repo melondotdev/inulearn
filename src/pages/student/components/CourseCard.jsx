@@ -1,27 +1,33 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Paper, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, FormControlLabel } from '@mui/material';
+import { Box, Button, Paper, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, FormControlLabel, TextField } from '@mui/material';
 
 const CourseCard = ({ course, enrolled, onEnroll }) => {
   const [expanded, setExpanded] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [enrollmentToken, setEnrollmentToken] = useState('');
   const navigate = useNavigate();
-  
+
   const handleEnrollClick = () => {
     setDialogOpen(true);
   };
 
-  const handleConfirmEnroll = () => {
-    onEnroll(course.id);
+  const handleConfirmEnroll = async () => {
+    const success = await onEnroll(course.id, enrollmentToken);
+    if (!success) {
+      // Handle error in parent component
+    }
     setDialogOpen(false);
     setTermsAccepted(false);
+    setEnrollmentToken('');
   };
 
   const handleDialogClose = () => {
     setDialogOpen(false);
     setTermsAccepted(false);
+    setEnrollmentToken('');
   };
 
   const handleGoToCourse = () => {
@@ -32,7 +38,7 @@ const CourseCard = ({ course, enrolled, onEnroll }) => {
     if (enrolled) {
       navigate(`/${course.id}/dashboard`);
     }
-  };  
+  };
 
   return (
     <>
@@ -94,8 +100,15 @@ const CourseCard = ({ course, enrolled, onEnroll }) => {
         <DialogTitle>Confirm Enrollment</DialogTitle>
         <DialogContent>
           <Typography variant="body1">
-            Please confirm that you agree to the terms and conditions to enroll in this course.
+            Please confirm that you agree to the terms and conditions and provide the enrollment token to enroll in this course.
           </Typography>
+          <TextField
+            label="Enrollment Token"
+            fullWidth
+            value={enrollmentToken}
+            onChange={(e) => setEnrollmentToken(e.target.value)}
+            margin="normal"
+          />
           <FormControlLabel
             control={<Checkbox checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} />}
             label="I agree to the terms and conditions"
@@ -103,7 +116,7 @@ const CourseCard = ({ course, enrolled, onEnroll }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={handleConfirmEnroll} color="primary" disabled={!termsAccepted}>
+          <Button onClick={handleConfirmEnroll} color="primary" disabled={!termsAccepted || !enrollmentToken}>
             Confirm
           </Button>
         </DialogActions>

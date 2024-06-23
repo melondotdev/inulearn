@@ -8,20 +8,24 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { db } from '../../firebase';
-import { collection, getDocs, query, where, doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import Header from './components/Header';
+import { db } from '../../firebase';
+import { collection, getDocs, query, where, doc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { studentOptions } from './lib/studentOptions';
 import CourseCard from './components/CourseCard';
+import axios from 'axios';
+import { Snackbar, Alert } from '@mui/material';
 
 const defaultTheme = createTheme();
+const serverUrl = process.env.REACT_APP_SERVER_URL; 
 
 const MyCourses = () => {
   const { user } = useContext(AuthContext);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [discoverableCourses, setDiscoverableCourses] = useState([]);
-  const [error, setError] = useState(null);
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -32,7 +36,7 @@ const MyCourses = () => {
 
         const enrolledCoursesData = enrolledCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const allCoursesData = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
+        
         const discoverableCoursesData = allCoursesData.filter(course => 
           !enrolledCoursesData.find(enrolledCourse => enrolledCourse.id === course.id)
         );
@@ -40,30 +44,57 @@ const MyCourses = () => {
         setEnrolledCourses(enrolledCoursesData);
         setDiscoverableCourses(discoverableCoursesData);
       } catch (err) {
-        setError('Failed to fetch courses. Please check your permissions and try again.');
+        console.log('Failed to fetch courses. Please check your permissions and try again.', err);
       }
     };
-
+    
     fetchCourses();
   }, [user.uid]);
 
-  const handleEnroll = async (courseId) => {
+  const handleEnroll = async (courseId, token) => {
     try {
-      const courseDocRef = doc(db, 'courses', courseId);
-      await updateDoc(courseDocRef, {
-        students: arrayUnion(user.uid)
+      const response = await axios.post(`${serverUrl}/enroll`, {
+        courseId,
+        token,
+        uid: user.uid
       });
-      
-      setEnrolledCourses(prevState => [
-        ...prevState,
-        discoverableCourses.find(course => course.id === courseId)
-      ]);
 
-      setDiscoverableCourses(prevState => prevState.filter(course => course.id !== courseId));
+      if (response.status === 200) {
+        // Update Firestore to set enrollment status inside the course document
+        const studentDocRef = doc(db, 'courses', courseId, 'students', user.uid);
+        await setDoc(studentDocRef, {
+          enrollmentStatus: true
+        }, { merge: true });
+
+        // Update the course document to include the student
+        const courseDocRef = doc(db, 'courses', courseId);
+        await updateDoc(courseDocRef, {
+          students: arrayUnion(user.uid)
+        });
+
+        setEnrolledCourses(prevState => [
+          ...prevState,
+          discoverableCourses.find(course => course.id === courseId)
+        ]);
+
+        setDiscoverableCourses(prevState => prevState.filter(course => course.id !== courseId));
+        return true;
+      } else {
+        setSnackbarMessage('Failed to enroll in course. Please check the token and try again.');
+        setSnackbarOpen(true);
+        console.error('Failed to enroll in course:', response.data);
+        return false;
+      }
     } catch (err) {
-      console.error("Failed to enroll in course:", err);
-      setError("Failed to enroll in course. Please try again later.");
+      console.error("Failed to enroll in course:", err.response ? err.response.data : err.message);
+      setSnackbarMessage("Failed to enroll in course. Please ensure that you are using the correct token.");
+      setSnackbarOpen(true);
+      return false;
     }
+  };
+  
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   const title = `My Courses`;
@@ -97,9 +128,7 @@ const MyCourses = () => {
                     Your Enrolled Courses
                   </Typography>
                   <Grid container>
-                    {error ? (
-                      <Typography color="error">{error}</Typography>
-                    ) : (
+                    {
                       enrolledCourses.length > 0 ? (
                         enrolledCourses.map(course => (
                           <CourseCard
@@ -112,7 +141,7 @@ const MyCourses = () => {
                       ) : (
                         <Typography>No enrolled courses</Typography>
                       )
-                    )}
+                    }
                   </Grid>
                 </Paper>
               </Grid>
@@ -126,9 +155,7 @@ const MyCourses = () => {
                     Discover New Courses
                   </Typography>
                   <Grid container>
-                    {error ? (
-                      <Typography color="error">{error}</Typography>
-                    ) : (
+                    {
                       discoverableCourses.length > 0 ? (
                         discoverableCourses.map(course => (
                           <CourseCard
@@ -141,7 +168,7 @@ const MyCourses = () => {
                       ) : (
                         <Typography>No new courses available</Typography>
                       )
-                    )}
+                    }
                   </Grid>
                 </Paper>
               </Grid>
@@ -149,6 +176,11 @@ const MyCourses = () => {
           </Container>
         </Box>
       </Box>
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 };
