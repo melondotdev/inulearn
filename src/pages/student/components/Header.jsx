@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from "../../../auth/AuthProvider";
-import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
-import { mainListItems } from '../lib/listItems';
+import { Link } from 'react-router-dom';
 
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -16,10 +15,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';
+import HomeIcon from '@mui/icons-material/Home'
 
 const drawerWidth = 240;
 
@@ -63,11 +66,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
           width: theme.spacing(9),
         },
       }),
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
     },
   }),
 );
 
-const Header = ({ title }) => {
+const Header = ({ title, list }) => {
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
   const [profileMenuAnchorEl, setProfileMenuAnchorEl] = useState(null);
@@ -78,16 +84,12 @@ const Header = ({ title }) => {
 
   // Access the logOut, and loading state from the AuthContext
   const { logOut } = useContext(AuthContext);
-  
-  // Use the useNavigate hook to programmatically navigate between pages
-  const navigate = useNavigate();
 
   // Handle user logout
   const handleSignOut = () => {
     logOut()
       .then(() => {
         console.log("User logged out successfully");
-        navigate("/login"); // Redirect to the login page after logout
       })
       .catch((error) => console.error(error));
   };
@@ -111,16 +113,6 @@ const Header = ({ title }) => {
 
   const handleProfileMenuClose = () => {
     setProfileMenuAnchorEl(null);
-  };
-
-  const handleProfileClick = () => {
-    navigate("/profile");
-    handleProfileMenuClose();
-  };
-
-  const handleLogOutClick = () => {
-    handleSignOut();
-    handleProfileMenuClose();
   };
 
   // Render loading indicator if authentication state is still loading
@@ -172,23 +164,24 @@ const Header = ({ title }) => {
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
-        <Toolbar
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            px: [1],
-          }}
-        >
-          <IconButton onClick={toggleDrawer}>
+        <List sx={{ p: 0, marginY: '8px', display: 'flex', justifyContent: 'space-between'}}>
+          <Link to="/courses" style={{ textDecoration: 'none', color: 'inherit', alignSelf: 'center' }}>
+            <ListItemButton>
+                <ListItemIcon>
+                  <HomeIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  My Courses
+                </ListItemText>
+            </ListItemButton>
+          </Link>  
+          <IconButton onClick={toggleDrawer} sx={{ alignSelf: 'center' }}>
             <ChevronLeftIcon />
           </IconButton>
-        </Toolbar>
+        </List>
         <Divider />
-        <List component="nav">
-          {mainListItems}
-          <Divider sx={{ my: 1 }} />
-          {/* {secondaryListItems} */}
+        <List component="nav" sx={{ flexGrow: 1 }}>
+          {list}
         </List>
       </Drawer>
       <Popover
@@ -216,11 +209,14 @@ const Header = ({ title }) => {
         open={Boolean(profileMenuAnchorEl)}
         onClose={handleProfileMenuClose}
       >
-        <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
-        <MenuItem onClick={handleLogOutClick}>Log Out</MenuItem>
+        <MenuItem component={Link} to="/profile">Profile</MenuItem>
+        <MenuItem component={Link} to="/courses">Back to My Courses</MenuItem>
+        <MenuItem component={Link} to="/booking">Book an Advisor</MenuItem>
+        <MenuItem onClick={handleSignOut}>Log Out</MenuItem>
       </Menu>
     </>
   );
 }
 
 export default Header;
+

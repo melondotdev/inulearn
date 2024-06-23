@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
-import { AuthContext } from "../../auth/AuthProvider";
+import { AuthContext } from "../../../auth/AuthProvider";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { mainListItems } from '../lib/courseContent';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -8,10 +9,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
-import Header from './components/Header';
-import Instructions from './components/Instructions';
-import Copyright from '../../components/Copyright';
-import Checklist from './components/Checklist';
+import Header from '../components/Header';
+import Instructions from '../components/Instructions';
+import Copyright from '../../../components/Copyright';
+import Checklist from '../components/Checklist';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -70,7 +71,7 @@ const JobAppChecklist = () => {
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <Header title={title} />
+        <Header title={title} list={mainListItems} />
         <Box
           component="main"
           sx={{

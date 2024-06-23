@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 
 export const mainListItems = (
   <React.Fragment>
-    <Link to="/dashboard">
+    <Link to="/npc-jita/dashboard">
       <ListItemButton >
         <ListItemIcon>
           <DashboardIcon />
@@ -22,15 +22,15 @@ export const mainListItems = (
         <ListItemText primary="Dashboard" />
       </ListItemButton>
     </Link>
-    <Link to="/checklist">
+    <Link to="/npc-jita/checklist">
       <ListItemButton>
         <ListItemIcon>
           <ChecklistIcon />
         </ListItemIcon>
-        <ListItemText primary="Job App Checklist" />
+        <ListItemText primary="Job Checklist" />
       </ListItemButton>
     </Link>
-    <Link to="/resume">
+    <Link to="/npc-jita/resume">
       <ListItemButton>
         <ListItemIcon>
           <DescriptionIcon />
@@ -38,7 +38,7 @@ export const mainListItems = (
         <ListItemText primary="Resume" />
       </ListItemButton>
     </Link>
-    <Link to="/pitch">
+    <Link to="/npc-jita/pitch">
       <ListItemButton>
         <ListItemIcon>
           <WavingHandIcon />
@@ -46,7 +46,7 @@ export const mainListItems = (
         <ListItemText primary="Elevator Pitch" />
       </ListItemButton>
     </Link>
-    <Link to="/stars">
+    <Link to="/npc-jita/stars">
       <ListItemButton>
         <ListItemIcon>
           <AutoAwesomeIcon />
@@ -54,7 +54,7 @@ export const mainListItems = (
         <ListItemText primary="STARS Stories" />
       </ListItemButton>
     </Link>
-    <Link to="/research">
+    <Link to="/npc-jita/research">
       <ListItemButton>
         <ListItemIcon>
           <BiotechIcon />
@@ -62,7 +62,7 @@ export const mainListItems = (
         <ListItemText primary="Job Research" />
       </ListItemButton>
     </Link>
-    <Link to="/roadmap">
+    <Link to="/npc-jita/roadmap">
       <ListItemButton>
         <ListItemIcon>
           <MapIcon />

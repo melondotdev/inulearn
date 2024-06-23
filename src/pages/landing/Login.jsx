@@ -31,7 +31,7 @@ const Login = () => {
   // Use useEffect to handle navigation after login
   useEffect(() => {
     if (user) {
-      navigate("/dashboard");
+      navigate("/courses");
     }
   }, [user, navigate]);
   
@@ -46,7 +46,7 @@ const Login = () => {
       .then((result) => {
         console.log(result);
         e.target.reset();
-        navigate("/dashboard");
+        navigate("/courses");
       })
       .catch((error) => {
         let errorMessage = error.message; // Get the error message from Firebase

@@ -3,17 +3,19 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/landing/Home";
 import Login from "./pages/landing/Login";
 import SignUp from "./pages/landing/SignUp";
-import Dashboard from "./pages/student/Dashboard";
-import JobAppChecklist from "./pages/student/JobAppChecklist";
-import Resume from './pages/student/Resume';
-import ElevatorPitch from "./pages/student/ElevatorPitch";
+import MyCourses from "./pages/student/MyCourses";
+import Dashboard from "./pages/student/templates/Dashboard";
+import JobAppChecklist from "./pages/student/templates/JobAppChecklist";
+import Resume from './pages/student/templates/Resume';
+import ElevatorPitch from "./pages/student/templates/ElevatorPitch";
 import PrivateRoute from "./auth/PrivateRoute";
 import AuthProvider from './auth/AuthProvider';
-import StarsStories from "./pages/student/StarStories";
-import Research from "./pages/student/Research";
-import Roadmap from "./pages/student/Roadmap";
-import Profile from "./pages/student/Profile";
+import StarsStories from "./pages/student/templates/StarStories";
+import Research from "./pages/student/templates/Research";
+import Roadmap from "./pages/student/templates/Roadmap";
+import Profile from "./pages/student/templates/Profile";
 import ResetPw from "./pages/landing/ResetPw";
+import Booking from "./pages/student/Booking";
 
 const App = () => {
   return (
@@ -26,57 +28,73 @@ const App = () => {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/reset" element={<ResetPw />} />
             <Route
-              path="/dashboard"
+              path="/courses"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['student', 'teacher']}>
+                  <MyCourses />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/booking"
+              element={
+                <PrivateRoute allowedRoles={['student', 'teacher']}>
+                  <Booking />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/npc-jita/dashboard"
+              element={
+                <PrivateRoute allowedRoles={['student', 'teacher']}>
                   <Dashboard />
                 </PrivateRoute>
               }
             />
             <Route
-              path="/checklist"
+              path="/npc-jita/checklist"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['student', 'teacher']}>
                   <JobAppChecklist />
                 </PrivateRoute>
               }
             />
             <Route
-              path="/resume"
+              path="/npc-jita/resume"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['student', 'teacher']}>
                   <Resume />
                 </PrivateRoute>
               }
             />
             <Route
-              path="/pitch"
+              path="/npc-jita/pitch"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['student', 'teacher']}>
                   <ElevatorPitch />
                 </PrivateRoute>
               }
             />
             <Route
-              path="/stars"
+              path="/npc-jita/stars"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['student', 'teacher']}>
                   <StarsStories />
                 </PrivateRoute>
               }
             />
             <Route
-              path="/research"
+              path="/npc-jita/research"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['student', 'teacher']}>
                   <Research />
                 </PrivateRoute>
               }
             />
             <Route
-              path="/roadmap"
+              path="/npc-jita/roadmap"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['student', 'teacher']}>
                   <Roadmap />
                 </PrivateRoute>
               }
@@ -84,7 +102,7 @@ const App = () => {
             <Route
               path="/profile"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['student', 'teacher']}>
                   <Profile />
                 </PrivateRoute>
               }

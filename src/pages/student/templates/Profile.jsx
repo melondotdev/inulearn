@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from "../../auth/AuthProvider";
+import { AuthContext } from "../../../auth/AuthProvider";
 import { updateProfile } from "firebase/auth";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import { studentOptions } from '../lib/studentOptions';
 
+import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
@@ -16,8 +17,8 @@ import MuiAlert from '@mui/material/Alert';
 import LockIcon from '@mui/icons-material/Lock';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import Header from './components/Header';
-import Copyright from '../../components/Copyright';
+import Header from '../components/Header';
+import Copyright from '../../../components/Copyright';
 
 const defaultTheme = createTheme();
 
@@ -64,7 +65,7 @@ const Profile = () => {
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <Header title={title} />
+        <Header title={title} list={studentOptions} />
         <Box
           component="main"
           sx={{

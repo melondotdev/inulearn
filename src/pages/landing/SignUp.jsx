@@ -24,13 +24,13 @@ const SignUp = () => {
   
   // If the user is already authenticated, redirect to the home page
   if (user) {
-    navigate("/dashboard");
+    navigate("/courses");
   }
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-
+    
     const firstName = data.get('firstName');
     const lastName = data.get('lastName');
     const email = data.get('email');
@@ -42,7 +42,7 @@ const SignUp = () => {
         updateProfile(result.user, {
           displayName: `${firstName} ${lastName}`,
         });
-        navigate("/dashboard");
+        navigate("/courses");
         console.log(result);
         e.target.reset();
       })

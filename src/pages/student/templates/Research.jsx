@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from "../../auth/AuthProvider";
+import { AuthContext } from "../../../auth/AuthProvider";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import { mainListItems } from '../lib/courseContent';
 
+import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
@@ -18,12 +19,12 @@ import TableRow from '@mui/material/TableRow';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
-import { db } from '../../firebase'; // Adjust the path as needed
+import { db } from '../../../firebase'; // Adjust the path as needed
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
-import Header from './components/Header';
-import Instructions from './components/Instructions';
-import Copyright from '../../components/Copyright';
+import Header from '../components/Header';
+import Instructions from '../components/Instructions';
+import Copyright from '../../../components/Copyright';
 
 const defaultTheme = createTheme();
 
@@ -103,7 +104,7 @@ const Research = () => {
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <Header title={title} />
+        <Header title={title} list={mainListItems} />
         <Box
           component="main"
           sx={{

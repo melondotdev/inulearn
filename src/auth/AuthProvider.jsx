@@ -12,22 +12,41 @@ export const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const createUser = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  const createUser = async (email, password) => {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    await user.getIdToken(true); // Force token refresh to include custom claims
+    setRole('student');
+    return userCredential;
   };
 
-  const loginUser = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const loginUser = async (email, password) => {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    const idTokenResult = await user.getIdTokenResult();
+    setRole(idTokenResult.claims.role);
+    return userCredential;
   };
 
   const logOut = () => {
+    setRole(null);
     return signOut(auth);
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        const idTokenResult = await currentUser.getIdTokenResult();
+        setUser(currentUser);
+        setRole(idTokenResult.claims.role);
+      } else {
+        setUser(null);
+        setRole(null);
+      }
+      setLoading(false);
     });
 
     return () => {
@@ -38,10 +57,12 @@ const AuthProvider = ({ children }) => {
   const authValue = {
     createUser,
     user,
+    role,
     loginUser,
     logOut,
+    loading,
   };
-
+  
   return <AuthContext.Provider value={authValue}>{children}</AuthContext.Provider>;
 };
 
