@@ -10,7 +10,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Header from './components/Header';
 import { db } from '../../firebase';
-import { collection, getDocs, query, where, doc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { studentOptions } from './lib/studentOptions';
 import CourseCard from './components/CourseCard';
 import axios from 'axios';
@@ -30,24 +30,30 @@ const MyCourses = () => {
     const fetchCourses = async () => {
       try {
         const coursesCollection = collection(db, 'courses');
-        const enrolledCoursesQuery = query(coursesCollection, where('students', 'array-contains', user.uid));
         const allCoursesSnapshot = await getDocs(coursesCollection);
-        const enrolledCoursesSnapshot = await getDocs(enrolledCoursesQuery);
-
-        const enrolledCoursesData = enrolledCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const allCoursesData = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        
-        const discoverableCoursesData = allCoursesData.filter(course => 
-          !enrolledCoursesData.find(enrolledCourse => enrolledCourse.id === course.id)
-        );
-
+  
+        const enrolledCoursesData = [];
+        const discoverableCoursesData = [];
+  
+        for (const courseDoc of allCoursesSnapshot.docs) {
+          const course = { id: courseDoc.id, ...courseDoc.data() };
+          const studentDocRef = doc(db, 'courses', courseDoc.id, 'students', user.uid);
+          const studentDoc = await getDoc(studentDocRef);
+  
+          if (studentDoc.exists() && studentDoc.data().enrollmentStatus) {
+            enrolledCoursesData.push(course);
+          } else {
+            discoverableCoursesData.push(course);
+          }
+        }
+  
         setEnrolledCourses(enrolledCoursesData);
         setDiscoverableCourses(discoverableCoursesData);
       } catch (err) {
         console.log('Failed to fetch courses. Please check your permissions and try again.', err);
       }
     };
-    
+  
     fetchCourses();
   }, [user.uid]);
 
