@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Paper, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { Box, Button, Paper, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, FormControlLabel, TextField, CircularProgress } from '@mui/material';
 
-const CourseCard = ({ course, enrolled, onEnroll }) => {
+const CourseCard = ({ course, enrolled, onEnroll, loading }) => {
   const [expanded, setExpanded] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -76,7 +76,9 @@ const CourseCard = ({ course, enrolled, onEnroll }) => {
             {expanded ? 'Show Less' : 'Show More'}
           </Button>
         </Box>
-        {enrolled ? (
+        {loading ? (
+          <CircularProgress size={24} sx={{ alignSelf: 'center' }} />
+        ) : enrolled ? (
           <Button
             size="small"
             color="primary"

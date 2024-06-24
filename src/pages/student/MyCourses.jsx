@@ -26,6 +26,7 @@ const MyCourses = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('error');
+  const [loading, setLoading] = useState(false); // New state for loading
   
   useEffect(() => {
     const fetchCourses = async () => {
@@ -59,6 +60,7 @@ const MyCourses = () => {
   }, [user.uid]);
 
   const handleEnroll = async (courseId, token) => {
+    setLoading(true);
     try {
       const response = await axios.post(`${serverUrl}/enroll`, {
         courseId,
@@ -87,7 +89,7 @@ const MyCourses = () => {
         setDiscoverableCourses(prevState => prevState.filter(course => course.id !== courseId));
         
         await updateRole();
-        
+
         setSnackbarMessage('Successfully enrolled in the course!');
         setSnackbarSeverity('success');
         return true;
@@ -102,6 +104,8 @@ const MyCourses = () => {
       setSnackbarMessage("Failed to enroll in course. Please ensure that you are using the correct token.");
       setSnackbarOpen(true);
       return false;
+    } finally {
+      setLoading(false);
     }
   };
   
@@ -175,6 +179,7 @@ const MyCourses = () => {
                             course={course}
                             enrolled={false}
                             onEnroll={handleEnroll}
+                            loading={loading}
                           />
                         ))
                       ) : (
