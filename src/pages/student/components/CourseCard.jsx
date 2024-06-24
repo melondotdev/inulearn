@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Paper, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, FormControlLabel, TextField, CircularProgress } from '@mui/material';
+import { Box, Button, Paper, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, FormControlLabel, TextField, Snackbar, Alert, CircularProgress, Backdrop } from '@mui/material';
 
 const CourseCard = ({ course, enrolled, onEnroll, loading }) => {
   const [expanded, setExpanded] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [enrollmentToken, setEnrollmentToken] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const navigate = useNavigate();
 
   const handleEnrollClick = () => {
@@ -17,7 +19,8 @@ const CourseCard = ({ course, enrolled, onEnroll, loading }) => {
   const handleConfirmEnroll = async () => {
     const success = await onEnroll(course.id, enrollmentToken);
     if (!success) {
-      // Handle error in parent component
+      setSnackbarMessage('Failed to enroll in course. Please check the token and try again.');
+      setSnackbarOpen(true);
     }
     setDialogOpen(false);
     setTermsAccepted(false);
@@ -38,6 +41,10 @@ const CourseCard = ({ course, enrolled, onEnroll, loading }) => {
     if (enrolled) {
       navigate(`/${course.id}/dashboard`);
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -76,14 +83,13 @@ const CourseCard = ({ course, enrolled, onEnroll, loading }) => {
             {expanded ? 'Show Less' : 'Show More'}
           </Button>
         </Box>
-        {loading ? (
-          <CircularProgress size={24} sx={{ alignSelf: 'center' }} />
-        ) : enrolled ? (
+        {enrolled ? (
           <Button
             size="small"
             color="primary"
             onClick={handleGoToCourse}
             sx={{ alignSelf: 'center' }}
+            disabled={loading}
           >
             Go to Course
           </Button>
@@ -93,6 +99,7 @@ const CourseCard = ({ course, enrolled, onEnroll, loading }) => {
             color="primary"
             onClick={handleEnrollClick}
             sx={{ alignSelf: 'center' }}
+            disabled={loading}
           >
             Enroll
           </Button>
@@ -101,6 +108,12 @@ const CourseCard = ({ course, enrolled, onEnroll, loading }) => {
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <DialogTitle>Confirm Enrollment</DialogTitle>
         <DialogContent>
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={loading}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
           <Typography variant="body1">
             Please confirm that you agree to the terms and conditions and provide the enrollment token to enroll in this course.
           </Typography>
@@ -110,19 +123,26 @@ const CourseCard = ({ course, enrolled, onEnroll, loading }) => {
             value={enrollmentToken}
             onChange={(e) => setEnrollmentToken(e.target.value)}
             margin="normal"
+            disabled={loading}
           />
           <FormControlLabel
             control={<Checkbox checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} />}
             label="I agree to the terms and conditions"
+            disabled={loading}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={handleConfirmEnroll} color="primary" disabled={!termsAccepted || !enrollmentToken}>
+          <Button onClick={handleDialogClose} disabled={loading}>Cancel</Button>
+          <Button onClick={handleConfirmEnroll} color="primary" disabled={!termsAccepted || !enrollmentToken || loading}>
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
@@ -131,6 +151,7 @@ CourseCard.propTypes = {
   course: PropTypes.object.isRequired,
   enrolled: PropTypes.bool.isRequired,
   onEnroll: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default CourseCard;

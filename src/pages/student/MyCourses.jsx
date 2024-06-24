@@ -92,9 +92,11 @@ const MyCourses = () => {
 
         setSnackbarMessage('Successfully enrolled in the course!');
         setSnackbarSeverity('success');
+        setSnackbarOpen(true);
         return true;
       } else {
         setSnackbarMessage('Failed to enroll in course. Please check the token and try again.');
+        setSnackbarSeverity('error');
         setSnackbarOpen(true);
         console.error('Failed to enroll in course:', response.data);
         return false;
