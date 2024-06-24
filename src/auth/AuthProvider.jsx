@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
     setRole(idTokenResult.claims.role || 'student');
     return userCredential;
   };
-
+  
   const loginUser = async (email, password) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
@@ -39,6 +39,14 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
   
+  const updateRole = async () => {
+    if (user) {
+      await user.getIdToken(true); // Force token refresh to include custom claims
+      const idTokenResult = await user.getIdTokenResult();
+      setRole(idTokenResult.claims.role);
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
@@ -64,6 +72,7 @@ const AuthProvider = ({ children }) => {
     role,
     loginUser,
     logOut,
+    updateRole,
     loading,
   };
   

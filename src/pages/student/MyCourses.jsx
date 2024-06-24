@@ -20,11 +20,12 @@ const defaultTheme = createTheme();
 const serverUrl = process.env.REACT_APP_SERVER_URL; 
 
 const MyCourses = () => {
-  const { user } = useContext(AuthContext);
+  const { user, updateRole } = useContext(AuthContext);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [discoverableCourses, setDiscoverableCourses] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('error');
   
   useEffect(() => {
     const fetchCourses = async () => {
@@ -84,6 +85,11 @@ const MyCourses = () => {
         ]);
 
         setDiscoverableCourses(prevState => prevState.filter(course => course.id !== courseId));
+        
+        await updateRole();
+        
+        setSnackbarMessage('Successfully enrolled in the course!');
+        setSnackbarSeverity('success');
         return true;
       } else {
         setSnackbarMessage('Failed to enroll in course. Please check the token and try again.');
@@ -183,7 +189,7 @@ const MyCourses = () => {
         </Box>
       </Box>
       <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
-        <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>

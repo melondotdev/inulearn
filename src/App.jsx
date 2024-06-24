@@ -30,7 +30,7 @@ const App = () => {
             <Route
               path="/courses"
               element={
-                <PrivateRoute allowedRoles={['npc-jita-student', '*']}>
+                <PrivateRoute allowedRoles={['*']}>
                   <MyCourses />
                 </PrivateRoute>
               }
